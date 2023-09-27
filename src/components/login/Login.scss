@@ -1,0 +1,72 @@
+.login-container {
+    padding         : 5% 0;
+    height          : 100vh;
+    background-color: #f0f2f5;
+
+    .left {
+        padding-left: 6%;
+
+        .brand {
+            font-size  : 4em;
+            font-weight: 700;
+            color      : #0d6efd;
+        }
+
+        .title {
+            font-size  : 1.6em;
+            font-weight: 600;
+        }
+    }
+
+    .right {
+        padding: 0 5%;
+
+        .brand {
+            text-align   : center;
+            font-size    : 2.7em;
+            font-weight  : 700;
+            color        : #0d6efd;
+            margin-bottom: 3%;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+            .form-control {
+                padding: 4%;
+            }
+
+            .login-btn {
+                width      : 100%;
+                font-size  : 1.3em;
+                font-weight: 600;
+            }
+
+            .forget {
+                margin-top: 3%;
+                text-align: center;
+
+                .form-text {
+                    color : #0d6efd !important;
+                    cursor: pointer;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+
+            }
+
+            .registerbtn-container {
+                padding   : 5% 0;
+                text-align: center;
+
+                .register-btn {
+                    font-weight: 600;
+                    font-size  : 1.1em;
+                    padding    : 3%;
+                }
+            }
+        }
+    }
+}
