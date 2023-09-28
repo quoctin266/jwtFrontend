@@ -6,9 +6,29 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
+import { useImmer } from "use-immer";
+import { postLogin } from "../../service/userService";
+import { toast } from "react-toastify";
 
 const Login = (props) => {
   const navigate = useNavigate();
+  const [formdata, setFormdata] = useImmer({
+    valueLogin: "",
+    password: "",
+  });
+
+  const handleChangeInput = (value, field) => {
+    setFormdata((draft) => {
+      draft[field] = value;
+    });
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    let res = await postLogin(formdata);
+    toast.warning(res.EM);
+  };
 
   return (
     <div className="login-container">
@@ -24,17 +44,30 @@ const Login = (props) => {
             <div className="brand d-md-none">facebook</div>
             <Card>
               <Card.Body>
-                <Form>
+                <Form onSubmit={handleLogin}>
                   <Form.Group className="mb-3" controlId="formGroupEmail">
                     <Form.Control
-                      type="email"
+                      name="valueLogin"
+                      type="text"
                       placeholder="Email address or phone number"
+                      value={formdata.valueLogin}
+                      onChange={(e) =>
+                        handleChangeInput(e.target.value, e.target.name)
+                      }
                     />
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formGroupPassword">
-                    <Form.Control type="password" placeholder="Password" />
+                    <Form.Control
+                      name="password"
+                      type="password"
+                      placeholder="Password"
+                      value={formdata.password}
+                      onChange={(e) =>
+                        handleChangeInput(e.target.value, e.target.name)
+                      }
+                    />
                   </Form.Group>
-                  <Button className="login-btn" variant="primary">
+                  <Button className="login-btn" variant="primary" type="submit">
                     Log In
                   </Button>
                   <div className="forget">
