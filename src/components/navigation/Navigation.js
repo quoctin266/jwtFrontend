@@ -15,14 +15,19 @@ const Navigation = () => {
           <NavLink className="nav-link" to="/" end>
             Home
           </NavLink>
-          <NavLink className="nav-link" to="/news">
-            News
+          <NavLink className="nav-link" to="/users">
+            Users
           </NavLink>
-          <NavLink className="nav-link" to="/contact">
-            Contact
+          <NavLink className="nav-link" to="/projects">
+            Projects
           </NavLink>
           <NavLink className="nav-link" to="/about">
             About
+          </NavLink>
+        </Nav>
+        <Nav>
+          <NavLink className="nav-link" to="/login">
+            Login
           </NavLink>
         </Nav>
       </Container>

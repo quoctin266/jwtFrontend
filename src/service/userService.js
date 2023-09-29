@@ -21,4 +21,14 @@ const postLogin = async (data) => {
   return await axios.post("/login", data);
 };
 
-export { validatePassword, validateEmail, postCreateUser, postLogin };
+const getAllUsers = async () => {
+  return await axios.get("/users");
+};
+
+export {
+  validatePassword,
+  validateEmail,
+  postCreateUser,
+  postLogin,
+  getAllUsers,
+};

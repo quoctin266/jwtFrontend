@@ -9,9 +9,15 @@ import { useNavigate } from "react-router-dom";
 import { useImmer } from "use-immer";
 import { postLogin } from "../../service/userService";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../redux/reducers/authSlice";
+import { useEffect } from "react";
 
 const Login = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   const [formdata, setFormdata] = useImmer({
     valueLogin: "",
     password: "",
@@ -27,8 +33,17 @@ const Login = (props) => {
     e.preventDefault();
 
     let res = await postLogin(formdata);
-    toast.warning(res.EM);
+    if (res && res.EC === 0) {
+      dispatch(login());
+      navigate("/users");
+      toast.success(res.EM);
+    } else toast.error(res.EM);
   };
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="login-container">
