@@ -1,22 +1,52 @@
 import { Button } from "react-bootstrap";
 import "./Users.scss";
 import Table from "react-bootstrap/Table";
-import { getAllUsers } from "../../service/userService";
+import { getUsersPaginate, deleteUser } from "../../service/userService";
 import { useEffect, useState } from "react";
-import Pagination from "react-bootstrap/Pagination";
+import ReactPaginate from "react-paginate";
+import { toast } from "react-toastify";
 
 const Users = () => {
+  const LIMIT = 2;
   const [listUsers, setListUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
 
-  const fetchAllUsers = async () => {
-    let res = await getAllUsers();
-    if (res && res.EC === 0) setListUsers(res.DT);
+  // const fetchAllUsers = async () => {
+  //   let res = await getAllUsers();
+  //   if (res && res.EC === 0) setListUsers(res.DT);
+  // };
+
+  const fetchUsersPaginate = async () => {
+    let res = await getUsersPaginate(currentPage, LIMIT);
+    if (res && res.EC === 0) {
+      setListUsers(res.DT.users);
+      setPageCount(res.DT.totalPages);
+    }
+  };
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected + 1);
+  };
+
+  const handleDelete = async (id) => {
+    let res = await deleteUser(id);
+    if (res && res.EC === 0) {
+      toast.success(res.EM);
+      setCurrentPage(1);
+    }
   };
 
   useEffect(() => {
-    fetchAllUsers();
+    fetchUsersPaginate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [currentPage]);
+
+  // useEffect(() => {
+  //   fetchAllUsers();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <div className="users-container">
@@ -44,12 +74,17 @@ const Users = () => {
               listUsers.map((user, index) => {
                 return (
                   <tr key={user.id}>
-                    <td>{index + 1}</td>
+                    <td>{index + 1 + (currentPage - 1) * LIMIT}</td>
                     <td>{user.email}</td>
                     <td>{user.username}</td>
                     <td>{user.Group ? user.Group.name : ""}</td>
                     <td>
-                      <Button variant="danger">Delete</Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDelete(user.id)}
+                      >
+                        Delete
+                      </Button>
                       <Button variant="warning" className="mx-2">
                         Edit
                       </Button>
@@ -61,22 +96,28 @@ const Users = () => {
         </Table>
       </div>
 
-      <div className="user-footer">
-        <Pagination>
-          <Pagination.Item>Previous</Pagination.Item>
-          <Pagination.Item>{1}</Pagination.Item>
-          <Pagination.Ellipsis />
-
-          <Pagination.Item>{10}</Pagination.Item>
-          <Pagination.Item>{11}</Pagination.Item>
-          <Pagination.Item active>{12}</Pagination.Item>
-          <Pagination.Item>{13}</Pagination.Item>
-          <Pagination.Item disabled>{14}</Pagination.Item>
-
-          <Pagination.Ellipsis />
-          <Pagination.Item>{20}</Pagination.Item>
-          <Pagination.Item>Next</Pagination.Item>
-        </Pagination>
+      <div className="user-footer mt-5">
+        <ReactPaginate
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={3}
+          pageCount={pageCount}
+          previousLabel="< previous"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakLabel="..."
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+          renderOnZeroPageCount={null}
+          forcePage={pageCount !== 0 ? currentPage - 1 : -1} //if there is user data to be fetch, display current page as active
+        />
       </div>
     </div>
   );

@@ -25,10 +25,24 @@ const getAllUsers = async () => {
   return await axios.get("/users");
 };
 
+const getUsersPaginate = async (page, limit) => {
+  return await axios.get(`/users?page=${page}&limit=${limit}`);
+};
+
+const deleteUser = async (id) => {
+  return await axios.delete("/users", {
+    data: {
+      id: id,
+    },
+  });
+};
+
 export {
   validatePassword,
   validateEmail,
   postCreateUser,
   postLogin,
   getAllUsers,
+  getUsersPaginate,
+  deleteUser,
 };
