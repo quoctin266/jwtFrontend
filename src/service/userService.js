@@ -37,6 +37,10 @@ const deleteUser = async (id) => {
   });
 };
 
+const getUserAccount = async () => {
+  return await axios.get("/account");
+};
+
 export {
   validatePassword,
   validateEmail,
@@ -45,4 +49,5 @@ export {
   getAllUsers,
   getUsersPaginate,
   deleteUser,
+  getUserAccount,
 };

@@ -34,8 +34,17 @@ const Login = (props) => {
 
     let res = await postLogin(formdata);
     if (res && res.EC === 0) {
-      dispatch(login());
-      navigate("/users");
+      dispatch(
+        login({
+          token: res.DT.accessToken,
+          account: {
+            email: res.DT.email,
+            username: res.DT.username,
+            roles: res.DT.data,
+          },
+        })
+      );
+      navigate("/");
       toast.success(res.EM);
     } else toast.error(res.EM);
   };
